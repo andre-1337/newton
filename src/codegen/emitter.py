@@ -45,6 +45,12 @@ class Emitter:
 			case _:
 				pass
 
+	def emitNewIntrinsic(self, obj):
+		self.emit("{} {} = malloc(sizeof({});")
+
+	def emitDeleteIntrinsic(self, obj):
+		self.emit("free({});", obj)
+
 	def emitIncludes(self):
 		self.emit("#include <stdio.h>\n")
 		self.emit("#include <stdlib.h>\n")
