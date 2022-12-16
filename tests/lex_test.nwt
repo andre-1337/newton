@@ -1,0 +1,5 @@
+fn main(argc: i32, argv: string[]): i32 {
+	let something = new totallyDeclaredObject();
+
+	return 0;
+}

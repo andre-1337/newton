@@ -5,28 +5,20 @@ This driver takes the input source file, runs it through the lexer, feeds the to
 which in turn feeds the AST output for analysis and then translates Newton source code to C.
 """
 
-from lexer import tokens
-from analysis import types
-from codegen import emitter
-from errors import errorcodes
-from syntaxtree import struct, var
+from sys import argv, exit
 
-def sourceToArr(source):
-	return source.split("\n")
+from lexer.lexer import Lexer
+from tokens.tokens import TokenType
 
 def main():
-	print("Newton compiler")
-
-	_str = types.String("Hello, world!")
-
-	_tkn = tokens.Token(_str.getValue(), tokens.TokenType.STRING, 3, len(_str.getValue()))
-
-	_err = errorcodes.ErrorCodes.UNTERMINATED_STRING
-	_src = sourceToArr("from std.io import println;\n\nfn main(argc: int, argv: string[]): int {\n    println(\"Hello, world!);\n	return 0;\n}")
-
-	_errStr = errorcodes.ErrorCodes.printErrorMessage(_err, [ _tkn.line, _tkn.col ], _src, "Consider closing the string with \"")	
-
-	print(_errStr) 
-
+	if (len(argv) != 2):
+		print("The Newton compiler requires a source file as an input")
+		exit(-1)
+	else:
+		_lex = Lexer(argv[1])
+		
+		tokens = _lex.lex()
+		for t in tokens:
+			print(str(t))
 if __name__ == "__main__":
 	main()

@@ -46,10 +46,10 @@ class Emitter:
 				pass
 
 	def emitNewIntrinsic(self, obj):
-		self.emit("{} {} = malloc(sizeof({});")
+		self.emit(f"{ obj.getName() } *{ obj.getName() } = malloc(sizeof({ obj.getName() });")
 
 	def emitDeleteIntrinsic(self, obj):
-		self.emit("free({});", obj)
+		self.emit(f"free({ obj });")
 
 	def emitIncludes(self):
 		self.emit("#include <stdio.h>\n")

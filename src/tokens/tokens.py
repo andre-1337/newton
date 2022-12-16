@@ -92,32 +92,6 @@ class TokenType(Enum):
 	NULL = 130				# null
 	# Operators
 
-def tokenTypeToStr(tokenKind):
-	match tokenKind:
-		case TokenType.EOF:
-			return "<eof>"
-
-		case TokenType.NEWLINE:
-			return "<newline>"
-
-		case TokenType.INTEGER:
-			return "<int>"
-
-		case TokenType.FLOAT:
-			return "<float>"
-
-		case TokenType.IDENTIFIER:
-			return "<identifier>"
-
-		case TokenType.STRING:
-			return "<string>"
-
-		case TokenType.CHAR:
-			return "<char>"
-
-		case _:
-			exit("how did you even get here?")
-
 """
 A class that represents a token in Newton.
 """
@@ -128,5 +102,5 @@ class Token:
 		self.line = line
 		self.col = col
 
-	def tokenToStr(self):
-		return tokenTypeToStr(self.tokenKind) + " (" + self.lexeme + ")"
+	def __str__(self):
+		return str(self.tokenKind) + " `" + self.lexeme + "`"

@@ -1,18 +1,18 @@
 from errors import errorcodes
-from tokens import Token, TokenType
+from tokens.tokens import Token, TokenType
+
+from sys import exit
 
 class Lexer:
     def __init__(self, filename):
-        self.source = []
+        self.filename = filename
+        self.source = open(filename, "r").read()
         self.idx = 0
         self.line = 1
         self.col = 0
 
-    def error(self, code, pos):
-        pass
-
     def peek(self):
-        return self.source[self.idx]
+        return self.source[self.idx] if not self.idx >= len(self.source) else "\0"
 
     def advance(self):
         if not self.atEnd():
@@ -72,7 +72,7 @@ class Lexer:
                 self.col = 0
             self.advance()
         if self.atEnd():
-            errorcodes.ErrorCodes.printErrorMessage(errorcodes.ErrorCodes.UNTERMINATED_STRING, [ self.line, self.col ], self.source, "Consider adding a closing \"")
+            errorcodes.ErrorCodes.printErrorMessage(errorcodes.ErrorCodes.UNTERMINATED_STRING, [ self.line, self.col ], self.filename, "Consider adding a closing \"")
         self.advance()
         return self.source[start:self.idx]
 
@@ -80,7 +80,7 @@ class Lexer:
         res = ""
         res += self.advance()
         if not self.peek() == "'":
-            errorcodes.ErrorCodes.printErrorMessage(errorcodes.ErrorCodes.UNTERMINATED_STRING, [ self.line, self.col ], self.source, "Consider adding a closing '")
+            errorcodes.ErrorCodes.printErrorMessage(errorcodes.ErrorCodes.UNTERMINATED_STRING, [ self.line, self.col ], self.filename, "Consider adding a closing '")
 
         return res
 
@@ -281,11 +281,7 @@ class Lexer:
                 self.advance()
             else:
                 if self.peek().isalpha() or self.peek() == "_":
-                    identifier = ""
-                    while self.peek().isalnum() or self.peek() == "_":
-                        identifier += self.peek()
-                        self.advance()
-
+                    identifier = self.identifier()
                     match identifier:
                         case "let":
                             tokens.append(Token(identifier, TokenType.LET, self.line, self.col))
@@ -356,7 +352,7 @@ class Lexer:
                             Token(num[0], TokenType.FLOAT, self.line, self.col))
                     else:
                         tokens.append(
-                            Token(num[0], TokenType.INT, self.line, self.col))
+                            Token(num[0], TokenType.INTEGER, self.line, self.col))
                 elif self.peek() == '"':
                     tokens.append(Token(self.string(), TokenType.STRING, self.line, self.col))
                 elif self.peek() == "'":
@@ -364,6 +360,7 @@ class Lexer:
                 elif self.peek() == "\0":
                     tokens.append(Token("\0", TokenType.EOF, self.line, self.col))
                 else:
-                    errorcodes.ErrorCodes.printErrorMessage(errorcodes.ErrorCodes.LEXING_ERROR, [ self.line, self.col ], self.source)
+                    print(self.peek())
+                    errorcodes.ErrorCodes.printErrorMessage(errorcodes.ErrorCodes.LEXING_ERROR, [ self.line, self.col ], self.filename)
 
         return tokens
