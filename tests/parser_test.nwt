@@ -1,0 +1,15 @@
+struct Pair[T1, T2] {
+	key: T1;
+	value: T2;
+
+	fn new(&self, key: T1, value: T2): Pair {
+		self.key = key;
+		self.value = value;
+	}
+}
+
+fn main(argc: i32, argv: string[]): i32 {
+	let pair = new Pair("John", 69);
+
+	return 0;
+}

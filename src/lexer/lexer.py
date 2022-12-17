@@ -1,4 +1,4 @@
-from errors import errorcodes
+from errors.errorcodes import Error
 from tokens.tokens import Token, TokenType
 
 from sys import exit
@@ -72,7 +72,7 @@ class Lexer:
                 self.col = 0
             self.advance()
         if self.atEnd():
-            errorcodes.ErrorCodes.printErrorMessage(errorcodes.ErrorCodes.UNTERMINATED_STRING, [ self.line, self.col ], self.filename, "Consider adding a closing \"")
+            Error.printErrorMessage(Error.UNTERMINATED_STRING, "Unterminated string literal" [ self.line, self.col ], self.filename, "Consider adding a closing \"")
         self.advance()
         return self.source[start:self.idx]
 
@@ -80,7 +80,7 @@ class Lexer:
         res = ""
         res += self.advance()
         if not self.peek() == "'":
-            errorcodes.ErrorCodes.printErrorMessage(errorcodes.ErrorCodes.UNTERMINATED_STRING, [ self.line, self.col ], self.filename, "Consider adding a closing '")
+            Error.printErrorMessage(Error.UNTERMINATED_STRING, "Unterminated character literal" [ self.line, self.col ], self.filename, "Consider adding a closing '")
 
         return res
 
@@ -343,6 +343,14 @@ class Lexer:
                             tokens.append(Token(identifier, TokenType.ABSTRACT, self.line, self.col))
                         case "mut":
                             tokens.append(Token(identifier, TokenType.MUT, self.line, self.col))
+                        case "match":
+                            tokens.append(Token(identifier, TokenType.MATCH, self.line, self.col))
+                        case "case":
+                            tokens.append(Token(identifier, TokenType.CASE, self.line, self.col))
+                        case "default":
+                            tokens.append(Token(identifier, TokenType.DEFAULT, self.line, self.col))
+                        case "finally":
+                            tokens.append(Token(identifier, TokenType.FINALLY, self.line, self.col))
                         case _:
                             tokens.append(Token(identifier, TokenType.IDENTIFIER, self.line, self.col))
                 elif self.peek().isdigit():
@@ -360,7 +368,6 @@ class Lexer:
                 elif self.peek() == "\0":
                     tokens.append(Token("\0", TokenType.EOF, self.line, self.col))
                 else:
-                    print(self.peek())
-                    errorcodes.ErrorCodes.printErrorMessage(errorcodes.ErrorCodes.LEXING_ERROR, [ self.line, self.col ], self.filename)
+                    Error.printErrorMessage(Error.LEXING_ERROR, "Unknown character while lexing", [ self.line, self.col ], self.filename)
 
         return tokens

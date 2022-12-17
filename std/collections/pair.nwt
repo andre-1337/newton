@@ -1,0 +1,19 @@
+trait __COMMON_PAIR_METHODS__[T1, T2] {
+	fn new(&self, key: T1, value: T2): Self {
+		self.key = key;
+		self.value = value;
+	}
+
+	fn getKey(&self): T1 => self.key;
+	fn getValue(&self): T2 => self.value;
+}
+
+struct ImmutPair[T1, T2] implements __COMMON_PAIR_METHODS__[T1, T2] {
+	key: readonly T1;
+	value: readonly T2;
+}
+
+struct MutPair[T1, T2] implements __COMMON_PAIR_METHODS__[T1, T2] {
+	key: mut T1;
+	value: mut T2;
+}

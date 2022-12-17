@@ -39,6 +39,12 @@ class Emitter:
 				else:
 					return "uint" + self.typeSizeToStr(ty) + "_t "
 
+			case types.Float:
+				if self.typeSizeToStr(ty) is "32":
+					return "float"
+				else:
+					return "double"
+
 			case types.String:
 				return "char *"
 
@@ -46,7 +52,7 @@ class Emitter:
 				pass
 
 	def emitNewIntrinsic(self, obj):
-		self.emit(f"{ obj.getName() } *{ obj.getName() } = malloc(sizeof({ obj.getName() });")
+		self.emit(f"{ obj.type } *{ obj.name } = malloc(sizeof({ obj.type });")
 
 	def emitDeleteIntrinsic(self, obj):
 		self.emit(f"free({ obj });")
@@ -54,7 +60,8 @@ class Emitter:
 	def emitIncludes(self):
 		self.emit("#include <stdio.h>\n")
 		self.emit("#include <stdlib.h>\n")
-		self.emit("#include <stdint.h>\n")
+		self.emit("#include <stdint.h>\n\n")
+		self.emit("#include \"newton_stdlib.h\"\n")		
 
 	def emitStruct(self, struct):
 		self.emit("typedef struct " + struct.name + " {\n")

@@ -1,0 +1,5 @@
+extern inline fn NEWTON_NEW(sz: usize): void*;
+extern inline fn NEWTON_SAFE_NEW(sz: usize): void*;
+
+fn alloc(sz: usize): void* => NEWTON_NEW(sz);
+fn safeAlloc(sz: usize): void* => NEWTON_SAFE_NEW(sz);

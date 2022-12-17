@@ -6,19 +6,23 @@ These will be shown in the error messages and you can even look up an error code
 from sys import exit
 from enum import Enum
 
-class ErrorCodes(Enum):
+RED = "\033[1;31m"
+RESET = "\033[1;0m"
+
+class Error(Enum):
 	INTERNAL_ERROR = 0
 	LEXING_ERROR = 1
-	UNTERMINATED_STRING = 2
+	PARSING_ERROR = 2
+	UNTERMINATED_STRING = 3
 
 	@staticmethod
-	def printErrorMessage(errCode, pos, filename, hint = ""):
+	def printErrorMessage(errCode, errMessage, pos, filename, hint = ""):
 		lineAtFault = open(filename, "r").readlines()[pos[0]-1][pos[1]]
 		
-		result = f"""╭ { ErrorCodes.codeToStr(errCode) } at { pos[0] }:{ pos[1] }
-┆
-┆ { lineAtFault }
-┆ { "^" * len(lineAtFault) }
+		result = f"""╭ { RED }{ Error.codeToStr(errCode) + errMessage}
+{ RESET }┆
+{ pos[0] }:{ pos[1] } ┆ { lineAtFault }
+┆ { " " * (pos[0] - 1) }{ "^" * len(lineAtFault) }
 ┆
 """
 
@@ -27,7 +31,7 @@ class ErrorCodes(Enum):
 		else:
 			result += f"┆ Hint: { hint }\n"
 
-		result += "╰━━━━━━━━━━━━━━\n"
+		result += f"╰━━━━━━━━━━━━━━\n"
 		
 		print(result)
 		exit(-1)
@@ -35,12 +39,17 @@ class ErrorCodes(Enum):
 	@staticmethod
 	def codeToStr(errCode):
 		match errCode:
-			case ErrorCodes.INTERNAL_ERROR:
-				return "[ NEWTON-0000 ]: Ooops! You ran into an internal compiler error"
-			case ErrorCodes.LEXING_ERROR:
-				return "[ NEWTON-0001 ]: Encountered a lexing error"
-			case ErrorCodes.UNTERMINATED_STRING:
-				return "[ NEWTON-0002 ]: Encountered an unterminated string literal"
+			case Error.INTERNAL_ERROR:
+				return "[ NEWTON-0000 ]: "
+
+			case Error.LEXING_ERROR:
+				return "[ NEWTON-0001 ]: "
+
+			case Error.PARSING_ERROR:
+				return "[ NEWTON-0002 ]: "
+
+			case Error.UNTERMINATED_STRING:
+				return "[ NEWTON-0003 ]: "
 
 			case _:
 				return "how did you get here?"

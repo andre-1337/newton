@@ -3,16 +3,11 @@ A variable in Newton.
 """
 
 class Variable:
-	def __init__(self, name, type, value):
+	def __init__(self, name, type, modifiers, value = None):
 		self.name = name
 		self.type = type
 		self.value = value
+		self.modifiers = modifiers
 
-	def getName(self):
-		return self.name
-
-	def getType(self):
-		return self.type
-
-	def getValue(self):
-		return self.value
+	def accept(self, visitor):
+		return visitor.visitVariable(self)

@@ -90,7 +90,13 @@ class TokenType(Enum):
 	TRUE = 128				# true
 	FALSE = 129				# false
 	NULL = 130				# null
-	# Operators
+	MATCH = 131				# match
+	CASE = 132				# case
+	DEFAULT = 133			# default
+	FINALLY = 134			# finally
+	READONLY = 135			# readonly
+	VOLATILE = 136			# volatile
+	REGISTER = 137			# register
 
 """
 A class that represents a token in Newton.
