@@ -66,11 +66,12 @@ int main(int argc, char **argv) {
 
 """
 class Structure:
-	def __init__(self, name, fields, methods, modifiers):
+	def __init__(self, name, fields, methods, modifiers, traits):
 		self.name = name
 		self.fields = fields
 		self.methods = methods
 		self.modifiers = modifiers
+		self.traits = traits
 
 	def getField(self, fieldName):
 		return self.fields[fieldName]
@@ -78,9 +79,11 @@ class Structure:
 	def getMethod(self, methodName):
 		return self.methods[methodName]
 
+	def getTrait(self, traitName):
+		return self.traits[traitName]
+
 	def accept(self, visitor):
 		return visitor.visitStructDef(self)
-
 
 class New:
 	def __init__(self, structName, parameters):
