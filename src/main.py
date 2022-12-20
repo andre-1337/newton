@@ -8,7 +8,6 @@ which in turn feeds the AST output for analysis and then translates Newton sourc
 from sys import argv, exit
 
 from lexer.lexer import Lexer
-from tokens.tokens import TokenType
 
 def main():
 	if (len(argv) != 2):

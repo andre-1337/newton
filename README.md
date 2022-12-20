@@ -20,10 +20,10 @@ enum Animal {
 }
 
 trait AnimalBehavior {
-	fn new(&self): Self;
+	fn new(&self): Self => self;
 
-	fn getAnimalType(): Animal;
-	fn getAnimalSound(): string;
+	fn getAnimalType(): abstract Animal;
+	fn getAnimalSound(): abstract string;
 }
 
 struct Cat implements AnimalBehavior {

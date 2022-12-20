@@ -66,12 +66,21 @@ int main(int argc, char **argv) {
 
 """
 class Structure:
-	def __init__(self, name, fields, methods, modifiers, traits):
+	def __init__(self, name, isGeneric, genericParams, fields, methods, traits, body):
 		self.name = name
+		self.isGeneric = isGeneric
+		self.genericParams = genericParams
 		self.fields = fields
 		self.methods = methods
-		self.modifiers = modifiers
 		self.traits = traits
+		self.body = body
+
+		self.mangledCName = self.name
+
+		# mangle the name of the struct so that we can generate generic structs on the C side of things
+		if self.isGeneric and self.genericParams is not None:
+			for genericParam in self.genericParams:
+				self.mangledCName += f"_{ genericParam }"
 
 	def getField(self, fieldName):
 		return self.fields[fieldName]

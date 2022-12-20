@@ -1,21 +1,3 @@
-from struct import Structure, New
-from var import Variable
-from array import Array, Subscript
-from assign import Assign
-from block import Block
-from call import Call
-from controlflow import Break, Continue, Return, If
-from expressions import Binary, Unary, Grouping, Literal
-from field import Fields
-from function import Function
-from _import import Import
-from iteration import While, For
-from _match import Match
-from parameter import Parameter
-from program import Program
-from reference import Reference, Get, Set
-from trait import Trait
-
 class Visitor:
     def visit(self, node):
         method = getattr(self, f"visit{ type(node).__name__ }", None)

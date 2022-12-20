@@ -4,7 +4,7 @@ class Break:
 
     def visit(self, visitor):
         return visitor.visitBreak(self)
-    
+
 
 class Continue:
     def __init__(self):

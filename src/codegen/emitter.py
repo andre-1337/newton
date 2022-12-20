@@ -33,20 +33,26 @@ class Emitter:
 	
 	def newtonTypeToC(self, ty):
 		match type(ty):
-			case types.Integer:
-				if ty.getSignedness():
+			case types.IntTy:
+				if ty.signed:
 					return "int" + self.typeSizeToStr(ty) + "_t "
 				else:
 					return "uint" + self.typeSizeToStr(ty) + "_t "
 
-			case types.Float:
-				if self.typeSizeToStr(ty) is "32":
-					return "float"
+			case types.FloatTy:
+				if self.typeSizeToStr(ty) == "32":
+					return "float "
 				else:
-					return "double"
+					return "double "
 
-			case types.String:
+			case types.StringTy:
 				return "char *"
+
+			case types.VoidTy:
+				return "void "
+
+			case types.PointerTy:
+				return f"""{ ty.baseTy.__str__(self) } { "*" * ty.n }"""
 
 			case _:
 				pass
@@ -61,16 +67,17 @@ class Emitter:
 		self.emit("#include <stdio.h>\n")
 		self.emit("#include <stdlib.h>\n")
 		self.emit("#include <stdint.h>\n\n")
-		self.emit("#include \"newton_stdlib.h\"\n")		
+		self.emit("#include \"newton_stdlib.h\"\n\n")		
 
 	def emitStruct(self, struct):
-		self.emit("typedef struct " + struct.name + " {\n")
+		self.emit("typedef struct " + struct.mangledCName + " {\n")
 
-		for fieldName in struct.getFields():
-			fieldType = self.newtonTypeToC(struct.getFields()[fieldName])
-			self.emit(fieldType + "" + fieldName + ";\n")
+		if struct.fields is not None:
+			for fieldName in struct.fields:
+				fieldType = self.newtonTypeToC(struct.fields[fieldName]).__str__()
+				self.emit("    " + fieldType + "" + fieldName + ";\n")
 
-		self.emit("} " + struct.name + ";\n")
+		self.emit("} " + struct.mangledCName + ";\n\n")
 
 	def emitVar(self, var):
 		self.emit(var.type + "" + var.name + " = " + str(var.value) + ";\n")

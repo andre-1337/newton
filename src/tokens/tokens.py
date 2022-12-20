@@ -94,19 +94,18 @@ class TokenType(Enum):
 	CASE = 132				# case
 	DEFAULT = 133			# default
 	FINALLY = 134			# finally
-	READONLY = 135			# readonly
-	VOLATILE = 136			# volatile
-	REGISTER = 137			# register
+	VOLATILE = 135			# volatile
+	REGISTER = 136			# register
 
 """
 A class that represents a token in Newton.
 """
 class Token:
-	def __init__(self, lexeme, tokenKind, line, col):
+	def __init__(self, lexeme, ttype, line, col):
 		self.lexeme = lexeme
-		self.tokenKind = tokenKind
+		self.ttype = ttype
 		self.line = line
 		self.col = col
 
 	def __str__(self):
-		return str(self.tokenKind) + " `" + self.lexeme + "`"
+		return str(self.ttype) + " `" + self.lexeme + "`"
